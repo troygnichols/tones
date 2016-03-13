@@ -43,5 +43,11 @@ module.exports = function(environment) {
 
   }
 
+  ENV['ember-cli-toggle'] = {
+    includedThemes: ['ios', 'default'],
+    excludedThemes: ['light', 'flip'],
+    defaultTheme: 'ios'
+  };
+
   return ENV;
 };
