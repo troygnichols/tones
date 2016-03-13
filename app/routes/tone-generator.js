@@ -7,5 +7,13 @@ export default Ember.Route.extend({
       this.store.createRecord('tone-item', { waveform: 'square', frequency: 220 }),
       this.store.createRecord('tone-item', { waveform: 'sawtooth', frequency: 110 })
     ]);
+  },
+
+  actions: {
+    willTransition() {
+      this.currentModel.forEach(function(tone) {
+        tone.pause();
+      });
+    }
   }
 });

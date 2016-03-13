@@ -304,6 +304,10 @@ a.pure-button-primary {
 
 /* Nav items */
 
+.nav-items {
+  margin: 1em;
+}
+
 .nav-item {
   background: transparent;
   border: 2px solid rgb(176, 202, 219);
@@ -312,4 +316,7 @@ a.pure-button-primary {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-size: 85%;
+}
+
+.nav-item.active {
 }

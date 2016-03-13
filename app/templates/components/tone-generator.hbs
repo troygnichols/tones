@@ -9,7 +9,7 @@
 
             <div class="pure-g">
 
-              <div class="pure-u-1-10">
+              <div class="pure-u-1-5">
                 <select class="pure-u-23-24" onchange={{action (mut tone.waveform) value='target.value'}}>
                   {{#each waveformOptions as |waveform|}}
                     <option value={{waveform}} selected={{eq waveform tone.waveform}}>{{waveform}}</option>
@@ -17,19 +17,19 @@
                 </select>
               </div>
 
-              <div class="pure-u-1-10">
+              <div class="pure-u-1-5">
                 <div class="pure-u-23-24">
                   {{input type='number' value=tone.frequency}}
                 </div>
               </div>
 
-              <div class="pure-u-1-10">
+              <div class="pure-u-1-12">
                 <div class="pure-u-23-24 tone-toggle-container">
                   {{x-toggle toggle='toggleTones' name=tone toggled=tone.isPlaying}}
                 </div>
               </div>
 
-              <div class="pure-u-1-10">
+              <div class="pure-u-1-5">
                 <button class="pure-button pure-button-danger pure-button-small" {{action 'removeTone' tone}}>
                   {{fa-icon 'times'}} Delete
                 </button>

@@ -6,6 +6,7 @@ const { Logger: { debug, error }, inject: { service }, observer } = Ember;
 export default DS.Model.extend({
   waveform: DS.attr('string', { defaultValue: 'sine' }),
   frequency: DS.attr('number', { defaultValue: 440 }),
+  isPlaying: DS.attr('boolean', { defaultValue: false }),
 
   audio: service('audio'),
 
@@ -41,6 +42,18 @@ export default DS.Model.extend({
     osc.type = this.get('waveform');
   }),
 
+  pause() {
+    debug('Pausing tone', this);
+    var osc = this.get('_cachedOscillator');
+
+    if (!osc) {
+      debug('No oscillator for tone, nothing to do');
+      return;
+    }
+
+    osc.frequency.value = 0;
+  },
+
   didDelete: function() {
     var osc = this.get('_cachedOscillator'),
         id = this.get('id');
@@ -53,7 +66,7 @@ export default DS.Model.extend({
         error('Failed to stop oscillator for tone', e, this);
       }
     } else {
-      debug(`No osciallator running on deletion of tone ${id}`);
+      debug(`No oscillator running on deletion of tone ${id}`);
     }
   }
 });
