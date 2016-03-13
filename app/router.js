@@ -5,6 +5,9 @@ const Router = Ember.Router.extend({
   location: config.locationType
 });
 
-Router.map(function() {});
+Router.map(function() {
+  this.route('tone-generator');
+  this.route('chord-builder');
+});
 
 export default Router;

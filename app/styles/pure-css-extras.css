@@ -301,3 +301,15 @@ a.pure-button-primary {
         font-size: 300%;
     }
 }
+
+/* Nav items */
+
+.nav-item {
+  background: transparent;
+  border: 2px solid rgb(176, 202, 219);
+  color: #000;
+  margin-top: 1em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 85%;
+}
