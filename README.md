@@ -7,3 +7,4 @@ This is a tone generator that uses the [Web Audio API](https://developer.mozilla
 - triangle
 - sawtooth
 
+## NOTE: this only works in Chrome right now, no other browsers implement the Web Audio API yet.
