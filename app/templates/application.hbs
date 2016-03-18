@@ -1,10 +1,16 @@
-<div class="content is-center nav-items">
-  {{nav-item route='tone-generator' text='Tone Generator'}}
-  {{nav-item route='chord-builder' text='Chord Builder'}}
-  {{!--
-  {{#link-to 'tone-generator' class='pure-button nav-item'}}{{fa-icon 'caret-right'}} Tone Generator {{fa-icon 'caret-left'}}{{/link-to}}
-  {{#link-to 'chord-builder' class='pure-button nav-item'}}Chord Builder{{/link-to}}
-  --}}
+<div class="top-bar">
+  <div class="row nav-items">
+    <div class="column medium-5 medium-centered">
+      <div class="row">
+        <div class="column medium-6">
+          {{nav-item route='tone-generator' text='Tone Generator' class='button'}}
+        </div>
+        <div class="column medium-6">
+          {{nav-item route='chord-builder' text='Chord Builder' class='button'}}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {{outlet}}

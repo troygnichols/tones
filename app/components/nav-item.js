@@ -4,7 +4,7 @@ const { Component } = Ember;
 
 export default Component.extend({
   tagName: 'button',
-  classNameBindings: [':pure-button', ':nav-item', 'isActive:active'],
+  classNameBindings: [':nav-item', 'isActive:active'],
 
   click() {
     if (this.get('isActive')) { return; }

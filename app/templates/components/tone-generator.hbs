@@ -1,48 +1,49 @@
-<div class="content">
-  <h2 class="content-head is-center">Tone Generator</h2>
+<div class="row medium-6 large-7 medium-centered">
 
-  <div class="pure-g">
-    <div class="l-box-lrg pure-u-1">
-      <form class="pure-form">
+  <div class="row">
+    <div class="column medium-3">
+      <label>Waveform</label>
+    </div>
 
-        {{#each tones as |tone|}}
+    <div class="column medium-3">
+      <label>Freq. (Hz)</label>
+    </div>
 
-            <div class="pure-g">
+    <div class="column medium-2">
+      <label>On/Off</label>
+    </div>
 
-              <div class="pure-u-1-5">
-                <select class="pure-u-23-24" onchange={{action (mut tone.waveform) value='target.value'}}>
-                  {{#each waveformOptions as |waveform|}}
-                    <option value={{waveform}} selected={{eq waveform tone.waveform}}>{{waveform}}</option>
-                  {{/each}}
-                </select>
-              </div>
-
-              <div class="pure-u-1-5">
-                <div class="pure-u-23-24">
-                  {{input type='number' value=tone.frequency}}
-                </div>
-              </div>
-
-              <div class="pure-u-1-12">
-                <div class="pure-u-23-24 tone-toggle-container">
-                  {{x-toggle toggle='toggleTones' name=tone toggled=tone.isPlaying}}
-                </div>
-              </div>
-
-              <div class="pure-u-1-5">
-                <button class="pure-button pure-button-danger pure-button-small" {{action 'removeTone' tone}}>
-                  {{fa-icon 'times'}} Delete
-                </button>
-              </div>
-
-            </div>
-
-        {{/each}}
-
-      </form>
-
-      <button class="pure-button" {{action 'addTone'}}>{{fa-icon 'plus'}} Add Tone</button>
-
+    <div class="column medium-4">
     </div>
   </div>
+
+  {{#each tones as |tone|}}
+    <div class="row">
+
+      <div class="column small-2 medium-3">
+        <select class="" onchange={{action (mut tone.waveform) value='target.value'}}>
+          {{#each waveformOptions as |waveform|}}
+            <option value={{waveform}} selected={{eq waveform tone.waveform}}>{{waveform}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="column small-2 medium-3">
+        {{input type='number' value=tone.frequency}}
+      </div>
+
+      <div class="column small-2 medium-2">
+        {{x-toggle toggle='toggleTones' name=tone toggled=tone.isPlaying}}
+      </div>
+
+      <div class="column small-2 medium-4">
+        <button class="button alert" {{action 'removeTone' tone}}>
+          {{fa-icon 'times'}} Delete
+        </button>
+      </div>
+
+    </div>
+  {{/each}}
+
+  <button class="button" {{action 'addTone'}}>{{fa-icon 'plus'}} Add Tone</button>
 </div>
