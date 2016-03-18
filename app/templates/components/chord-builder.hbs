@@ -1,27 +1,38 @@
-<div class="row medium-6 medium-centered">
+<div class="row medium-10 medium-centered">
 
   <div class="row">
-    <div class="column medium-3">
+    <div class="column medium-1">
       <label>Pitch</label>
     </div>
 
-    <div class="column medium-3">
+    <div class="column medium-1">
       <label>Mod</label>
     </div>
 
-    <div class="column medium-3">
+    <div class="column medium-2">
       <label>Waveform</label>
     </div>
 
-    <div class="column medium-3">
+    <div class="column medium-1">
       <label>Octave</label>
+    </div>
+
+    <div class="column medium-2">
+      <label>Frequency</label>
+    </div>
+
+    <div class="column medium-2">
+      <label>On/Off</label>
+    </div>
+
+    <div class="column medium-2">
     </div>
   </div>
 
   {{#each notes as |note|}}
     <div class="row">
 
-      <div class="column medium-3">
+      <div class="column medium-1">
         <select onchange={{action (mut note.pitch) value='target.value'}}>
           {{#each pitchOptions as |pitch|}}
             <option value={{pitch}} selected={{eq pitch note.pitch}}>{{pitch}}</option>
@@ -29,7 +40,7 @@
         </select>
       </div>
 
-      <div class="column medium-3">
+      <div class="column medium-1">
         <select onchange={{action (mut note.modulator) value='target.value'}}>
           {{#each modulatorOptions as |modulator|}}
             <option value={{modulator.value}} selected={{eq modulator note.modulator}}>{{modulator.name}}</option>
@@ -37,7 +48,7 @@
         </select>
       </div>
 
-      <div class="column medium-3">
+      <div class="column medium-2">
         <select class="" onchange={{action (mut note.waveform) value='target.value'}}>
           {{#each waveformOptions as |waveform|}}
             <option value={{waveform}} selected={{eq waveform note.waveform}}>{{waveform}}</option>
@@ -45,10 +56,26 @@
         </select>
       </div>
 
-      <div class="column medium-3">
+      <div class="column medium-1">
         {{input type='number' value=note.octave}}
+      </div>
+
+      <div class="column medium-2">
+        {{input readonly=true value=note.frequency}}
+      </div>
+
+      <div class="column medium-2">
+        {{x-toggle toggle='toggleNotes' name=note toggled=note.isPlaying}}
+      </div>
+
+      <div class="column medium-3">
+        <button class="button alert" {{action 'removeTone' tone}}>
+          {{fa-icon 'times'}} Delete
+        </button>
       </div>
 
     </div>
   {{/each}}
+
+  <button class="button" {{action 'addNote'}}>{{fa-icon 'plus'}} Add Note</button>
 </div>

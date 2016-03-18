@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { inject: { service }, String: { htmlSafe } } = Ember;
+const { computed, inject: { service }, String: { htmlSafe } } = Ember;
 
 export default Ember.Component.extend({
   classNames: ['chord-builder'],
@@ -30,5 +30,17 @@ export default Ember.Component.extend({
   sharpSymbol: htmlSafe('&#9839'),
 
   actions: {
+    toggleNotes(isToggled, note) {
+      console.log('toggleNotes called', note);
+    },
+
+    addNote() {
+      var newNote = this.get('store').createRecord('note', {
+        pitch: 'C',
+        tone: this.get('store').createRecord('tone-item')
+      });
+
+      this.get('notes').pushObject(newNote);
+    }
   }
 });

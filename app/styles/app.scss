@@ -6,6 +6,15 @@
 
 .nav-items {
   margin-top: 1em;
+
+  .nav-item {
+    &.active {
+      background-color: #aaa;
+      color: #fff;
+    }
+
+    width: 100%;
+  }
 }
 
 label {
