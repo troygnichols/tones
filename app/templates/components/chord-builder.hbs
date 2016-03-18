@@ -1,0 +1,54 @@
+<div class="row medium-6 medium-centered">
+
+  <div class="row">
+    <div class="column medium-3">
+      <label>Pitch</label>
+    </div>
+
+    <div class="column medium-3">
+      <label>Mod</label>
+    </div>
+
+    <div class="column medium-3">
+      <label>Waveform</label>
+    </div>
+
+    <div class="column medium-3">
+      <label>Octave</label>
+    </div>
+  </div>
+
+  {{#each notes as |note|}}
+    <div class="row">
+
+      <div class="column medium-3">
+        <select onchange={{action (mut note.pitch) value='target.value'}}>
+          {{#each pitchOptions as |pitch|}}
+            <option value={{pitch}} selected={{eq pitch note.pitch}}>{{pitch}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="column medium-3">
+        <select onchange={{action (mut note.modulator) value='target.value'}}>
+          {{#each modulatorOptions as |modulator|}}
+            <option value={{modulator.value}} selected={{eq modulator note.modulator}}>{{modulator.name}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="column medium-3">
+        <select class="" onchange={{action (mut note.waveform) value='target.value'}}>
+          {{#each waveformOptions as |waveform|}}
+            <option value={{waveform}} selected={{eq waveform note.waveform}}>{{waveform}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="column medium-3">
+        {{input type='number' value=note.octave}}
+      </div>
+
+    </div>
+  {{/each}}
+</div>
