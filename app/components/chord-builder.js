@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-const { computed, inject: { service }, String: { htmlSafe } } = Ember;
+const { inject: { service }, String: { htmlSafe } } = Ember;
 
 export default Ember.Component.extend({
   classNames: ['chord-builder'],
@@ -41,6 +41,11 @@ export default Ember.Component.extend({
       });
 
       this.get('notes').pushObject(newNote);
+    },
+
+    removeNote(note) {
+      var tone = note.get('tone');
+      this.get('notes').removeObject(note);
     }
   }
 });
