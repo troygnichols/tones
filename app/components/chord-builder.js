@@ -1,6 +1,11 @@
 import Ember from 'ember';
 
-const { inject: { service }, String: { htmlSafe } } = Ember;
+const {
+  inject: { service },
+  String: { htmlSafe },
+  RSVP:   { Promise },
+  run:    { later }
+} = Ember;
 
 export default Ember.Component.extend({
   classNames: ['chord-builder'],
@@ -29,6 +34,18 @@ export default Ember.Component.extend({
 
   sharpSymbol: htmlSafe('&#9839'),
 
+  init() {
+    this.get('notes').forEach( (note) => {
+      // This is kind of hacky, but the only way I found to get the note's tone
+      // to call its playOrPause function. note('tone') seems to return something
+      // that is not actually a full ToneItem object, or at any rate it does not
+      // have a playOrPause function defined. Pinging the observed property
+      // 'invokePlayOrPause' causes the tone's playOrPause to fire.
+      note.set('tone.invokePlayOrPause', true);
+    });
+    return this._super(...arguments);
+  },
+
   actions: {
     toggleNotes(isToggled, note) {
       console.log('toggleNotes called', note);
@@ -45,6 +62,35 @@ export default Ember.Component.extend({
 
     removeNote(note) {
       this.get('notes').removeObject(note);
+    },
+
+    playAll() {
+      this.get('notes').forEach( (note) => {
+        note.set('isPlaying', true);
+      });
+    },
+
+    pauseAll() {
+      this.get('notes').forEach( (note) => {
+        note.set('isPlaying', false);
+      });
+    },
+
+    save() {
+      this.set('isSaving', true);
+
+      var promises = [];
+
+      this.get('notes').forEach( (note) => {
+        promises.push(note.save());
+      });
+
+      Promise.all(promises).then( () => {
+        this.setProperties({ isSaving: false, hasSavedRecently: true });
+        later(this, () => {
+          this.set('hasSavedRecently', false);
+        }, 1250);
+      });
     }
   }
 });

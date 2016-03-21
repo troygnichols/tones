@@ -3,8 +3,9 @@ import Ember from 'ember';
 export default Ember.Route.extend({
   model() {
     return this.store.findAll('tone-item').then( (found) => {
-      if (found.get('length')) {
-        return found.filterBy('hasNote', false).toArray();
+      found = found.filterBy('hasNote', false).toArray();
+      if (found.length) {
+        return found;
       } else {
         return this.defaultTones();
       }

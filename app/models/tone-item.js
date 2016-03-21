@@ -7,6 +7,7 @@ export default DS.Model.extend({
   waveform:  DS.attr('string',  { defaultValue: 'sine' }),
   frequency: DS.attr('number',  { defaultValue: 440 }),
   isPlaying: DS.attr('boolean', { defaultValue: false }),
+  isPaused:  DS.attr('boolean', { defaultValue: false }),
   volume:    DS.attr('number',  { defaultValue: 0.5 }),
   hasNote:   DS.attr('boolean', { defaultValue: false }),
 
@@ -40,18 +41,30 @@ export default DS.Model.extend({
 
   updateVolume: observer('volume', function() {
     var vol = this.get('volume');
-    debug(`updateVolumne set to ${vol} for tone`, this);
+    debug(`updateVolume set to ${vol} for tone`, this);
 
     this.get('gainNode').gain.value = vol;
   }),
 
-  playOrPause: observer('isPlaying', 'frequency', 'waveform', function() {
+  updateIsPaused: observer('isPaused', function() {
+    var isPaused = this.get('isPaused');
+    debug(`updateIsPaused, isPaused: ${isPaused}`);
+
+    if (isPaused) {
+      this.pause();
+    }
+  }),
+
+  playOrPause: observer('invokePlayOrPause', 'isPlaying', 'frequency', 'waveform', function() {
     debug('playOrPause tone: ', this);
+    this.set('invokePlayOrPause', false);
 
     var osc = this.get('oscillator');
     this.updateVolume();
 
     if (this.get('isPlaying')) {
+      this.set('isPaused', false);
+
       osc.frequency.value = this.get('frequency');
 
       if (!osc.isStarted) {

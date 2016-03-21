@@ -21,8 +21,8 @@ export default Ember.Component.extend({
   init() {
     this.get('tones').forEach( (tone) => {
       tone.playOrPause();
-      return this._super(...arguments);
     });
+    return this._super(...arguments);
   },
 
   actions: {

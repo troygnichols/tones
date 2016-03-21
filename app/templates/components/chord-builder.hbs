@@ -1,4 +1,32 @@
 <div class="row medium-10 medium-centered">
+  <div class="row">
+    <div class="column medium-3">
+      <button class="button" {{action 'addNote'}}>{{fa-icon 'plus'}} Add Note</button>
+    </div>
+
+    <div class="column medium-3">
+      <button class="button" {{action 'pauseAll'}}>{{fa-icon 'pause'}} Pause All</button>
+    </div>
+
+    <div class="column medium-3">
+      <button class="button" {{action 'playAll'}}>{{fa-icon 'play'}} Play All</button>
+    </div>
+
+    <div class="column medium-3">
+      <button class="button" {{action 'save'}}>
+        {{#if isSaving}}
+          {{fa-icon 'spinner fa-spin'}}
+        {{else}}
+          {{#if hasSavedRecently}}
+            {{fa-icon 'check-circle-o'}}
+          {{else}}
+            {{fa-icon 'save'}}
+          {{/if}}
+        {{/if}}
+        Save
+      </button>
+    </div>
+  </div>
 
   <div class="row">
     <div class="column medium-1">
@@ -21,8 +49,12 @@
       <label>Frequency</label>
     </div>
 
-    <div class="column medium-2">
+    <div class="column medium-1">
       <label>On/Off</label>
+    </div>
+
+    <div class="column medium-2">
+      <label>Volume</label>
     </div>
 
     <div class="column medium-2">
@@ -64,11 +96,15 @@
         {{input readonly=true value=note.frequency}}
       </div>
 
-      <div class="column medium-2">
+      <div class="column medium-1">
         {{x-toggle toggle='toggleNotes' name=note toggled=note.isPlaying}}
       </div>
 
-      <div class="column medium-3">
+      <div class="column medium-2">
+        {{input type='range' min='0' max='1' step='0.1' value=note.volume}}
+      </div>
+
+      <div class="column medium-2">
         <button class="button alert" {{action 'removeNote' note}}>
           {{fa-icon 'times'}} Delete
         </button>
@@ -77,5 +113,4 @@
     </div>
   {{/each}}
 
-  <button class="button" {{action 'addNote'}}>{{fa-icon 'plus'}} Add Note</button>
 </div>

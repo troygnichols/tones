@@ -14,10 +14,7 @@ export default Ember.Route.extend({
   actions: {
     willTransition() {
       this.currentModel.forEach( (note) => {
-        var tone = note.get('tone');
-        if (tone) {
-          tone.pause();
-        }
+        note.set('isPaused', true);
       });
     }
   },

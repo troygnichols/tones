@@ -5,15 +5,17 @@ const { Logger: { debug }, computed: { alias }, inject: { service }, observer } 
 
 export default DS.Model.extend({
 
-  pitch: DS.attr('string', { defaultValue: 'C' }),
+  pitch:     DS.attr('string', { defaultValue: 'C' }),
   modulator: DS.attr('string', { defaultValue: 'natural' }),
-  octave: DS.attr('number', { defaultValue: 4 }),
+  octave:    DS.attr('number', { defaultValue: 4 }),
 
   tone: DS.belongsTo('tone-item'),
 
   frequency: alias('tone.frequency'),
-  waveform: alias('tone.waveform'),
+  waveform:  alias('tone.waveform'),
   isPlaying: alias('tone.isPlaying'),
+  isPaused:  alias('tone.isPaused'),
+  volume:    alias('tone.volume'),
 
   notes: service(),
 
