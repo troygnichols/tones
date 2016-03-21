@@ -4,9 +4,11 @@ import Ember from 'ember';
 const { Logger: { debug, error }, inject: { service }, observer } = Ember;
 
 export default DS.Model.extend({
-  waveform: DS.attr('string', { defaultValue: 'sine' }),
-  frequency: DS.attr('number', { defaultValue: 440 }),
+  waveform:  DS.attr('string',  { defaultValue: 'sine' }),
+  frequency: DS.attr('number',  { defaultValue: 440 }),
   isPlaying: DS.attr('boolean', { defaultValue: false }),
+  volume:    DS.attr('number',  { defaultValue: 0.5 }),
+  hasNote:   DS.attr('boolean', { defaultValue: false }),
 
   audio: service('audio'),
 
@@ -16,16 +18,38 @@ export default DS.Model.extend({
       return osc;
     }
 
-    osc = this.get('audio').newConnectedOscillator();
+    osc = this.get('audio').newOscillator();
     this.set('_cachedOscillator', osc);
 
     return osc;
   }.property(),
 
+  gainNode: function() {
+    var gn = this.get('_cachedGainNode');
+    if (gn) {
+      return gn;
+    }
+
+    var osc = this.get('oscillator');
+    gn = this.get('audio').newGainNodeForSource(osc);
+    gn.connect(osc.context.destination);
+    this.set('_cachedGainNode', gn);
+
+    return gn;
+  }.property(),
+
+  updateVolume: observer('volume', function() {
+    var vol = this.get('volume');
+    debug(`updateVolumne set to ${vol} for tone`, this);
+
+    this.get('gainNode').gain.value = vol;
+  }),
+
   playOrPause: observer('isPlaying', 'frequency', 'waveform', function() {
     debug('playOrPause tone: ', this);
 
     var osc = this.get('oscillator');
+    this.updateVolume();
 
     if (this.get('isPlaying')) {
       osc.frequency.value = this.get('frequency');

@@ -1,11 +1,39 @@
 <div class="row medium-6 large-7 medium-centered">
+  <div class="row">
+    <div class="column medium-3">
+      <button class="button round" {{action 'addTone'}}>{{fa-icon 'plus'}} Add Tone</button>
+    </div>
+
+    <div class="column medium-3">
+      <button class="button" {{action 'pauseAll'}}>{{fa-icon 'pause'}} Pause All</button>
+    </div>
+
+    <div class="column medium-3">
+      <button class="button" {{action 'playAll'}}>{{fa-icon 'play'}} Play All</button>
+    </div>
+
+    <div class="column medium-3">
+      <button class="button" {{action 'save'}}>
+        {{#if isSaving}}
+          {{fa-icon 'spinner fa-spin'}}
+        {{else}}
+          {{#if hasSavedRecently}}
+            {{fa-icon 'check-circle-o'}}
+          {{else}}
+            {{fa-icon 'save'}}
+          {{/if}}
+        {{/if}}
+        Save
+      </button>
+    </div>
+  </div>
 
   <div class="row">
     <div class="column medium-3">
       <label>Waveform</label>
     </div>
 
-    <div class="column medium-3">
+    <div class="column medium-2">
       <label>Freq. (Hz)</label>
     </div>
 
@@ -13,14 +41,18 @@
       <label>On/Off</label>
     </div>
 
-    <div class="column medium-4">
+    <div class="column medium-2">
+      <label>Volume</label>
+    </div>
+
+    <div class="column medium-2">
     </div>
   </div>
 
   {{#each tones as |tone|}}
     <div class="row">
 
-      <div class="column small-2 medium-3">
+      <div class="column medium-3">
         <select class="" onchange={{action (mut tone.waveform) value='target.value'}}>
           {{#each waveformOptions as |waveform|}}
             <option value={{waveform}} selected={{eq waveform tone.waveform}}>{{waveform}}</option>
@@ -28,15 +60,19 @@
         </select>
       </div>
 
-      <div class="column small-2 medium-3">
+      <div class="column medium-2">
         {{input type='number' value=tone.frequency}}
       </div>
 
-      <div class="column small-2 medium-2">
+      <div class="column medium-2">
         {{x-toggle toggle='toggleTones' name=tone toggled=tone.isPlaying}}
       </div>
 
-      <div class="column small-2 medium-4">
+      <div class="column medium-2">
+        {{input type='range' min='0' max='1' step='0.1' value=tone.volume}}
+      </div>
+
+      <div class="column medium-3">
         <button class="button alert" {{action 'removeTone' tone}}>
           {{fa-icon 'times'}} Delete
         </button>
@@ -45,5 +81,4 @@
     </div>
   {{/each}}
 
-  <button class="button" {{action 'addTone'}}>{{fa-icon 'plus'}} Add Tone</button>
 </div>

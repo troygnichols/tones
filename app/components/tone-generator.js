@@ -1,6 +1,11 @@
 import Ember from 'ember';
 
-const { inject: { service }, Logger: { debug } } = Ember;
+const {
+  inject: { service },
+  Logger: { debug },
+  RSVP:   { Promise },
+  run:    { later }
+} = Ember;
 
 export default Ember.Component.extend({
   classNames: ['tone-generator'],
@@ -13,13 +18,29 @@ export default Ember.Component.extend({
     'sine', 'square', 'sawtooth', 'triangle'
   ]),
 
+  init() {
+    this.get('tones').forEach( (tone) => {
+      tone.playOrPause();
+      return this._super(...arguments);
+    });
+  },
+
   actions: {
     toggleTones(isToggled, tone) {
       debug(`toggle tone: ${isToggled}`, tone);
       tone.set('isPlaying', isToggled);
     },
 
+    playAll() {
+      this.get('tones').forEach( (tone) => {
+        tone.set('isPlaying', true);
+      });
+    },
+
     pauseAll() {
+      this.get('tones').forEach( (tone) => {
+        tone.set('isPlaying', false);
+      });
     },
 
     removeTone(tone) {
@@ -30,6 +51,23 @@ export default Ember.Component.extend({
     addTone() {
       var newTone = this.get('store').createRecord('tone-item');
       this.get('tones').pushObject(newTone);
+    },
+
+    save() {
+      this.set('isSaving', true);
+
+      var promises = [];
+
+      this.get('tones').forEach( (tone) => {
+        promises.push(tone.save());
+      });
+
+      Promise.all(promises).then( () => {
+        this.setProperties({ isSaving: false, hasSavedRecently: true });
+        later(this, () => {
+          this.set('hasSavedRecently', false);
+        }, 1250);
+      });
     }
   }
 

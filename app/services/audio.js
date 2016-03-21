@@ -15,11 +15,17 @@ export default Ember.Service.extend({
     return ctx;
   },
 
-  newConnectedOscillator() {
+  newOscillator() {
     var ctx = this.getAudioContext();
     var osc = ctx.createOscillator();
-    osc.connect(ctx.destination);
     return osc;
+  },
+
+  newGainNodeForSource(source) {
+    var ctx = this.getAudioContext();
+    var gainNode = ctx.createGain();
+    source.connect(gainNode);
+    return gainNode;
   }
 
 });

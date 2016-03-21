@@ -44,7 +44,6 @@ export default Ember.Component.extend({
     },
 
     removeNote(note) {
-      var tone = note.get('tone');
       this.get('notes').removeObject(note);
     }
   }
