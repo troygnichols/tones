@@ -20,6 +20,11 @@ export default DS.Model.extend({
   notes: service(),
 
   updateFrequency: observer('pitch', 'modulator', 'octave', 'tone', function() {
+    if (this.get('isDeleted')) {
+      debug('updateFrequency called on deleted object', this);
+      return;
+    }
+
     var pitch = this.get('pitch'), mod = this.get('modulator'), octave = this.get('octave');
     var freq = this.get('notes').frequencyForPitch(pitch, mod, octave);
     debug(`updateFrequency, pitch: ${pitch}, modulator: ${mod}, octave: ${octave}, freq: ${freq}`);

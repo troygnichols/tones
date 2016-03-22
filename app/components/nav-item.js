@@ -16,7 +16,7 @@ export default Component.extend({
   }.property('currentPath'),
 
   applicationController: function() {
-    return Ember.getOwner(this).lookup('controller:application')
+    return Ember.getOwner(this).lookup('controller:application');
   }.property(),
 
   currentPath: function() {

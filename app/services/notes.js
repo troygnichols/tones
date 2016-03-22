@@ -43,6 +43,71 @@ export default Ember.Service.extend({
     }
   },
 
+  distanceBetweenPitches(p1, p2) {
+    p1 = `${p1.toLowerCase()}`;
+    p2 = `${p2.toLowerCase()}`;
+
+    var map = this.pitchToNumberMap;
+    return Math.abs(map[p2] - map[p1]);
+  },
+
+  pitchBefore(pitchLetter) {
+    var letter = `${pitchLetter}`.toLowerCase();
+    var pitches = this.get('allPitches');
+    var pitchIndex  = pitches.indexOf(letter);
+    var pitchBefore = pitches[pitchIndex-1];
+    if (pitchBefore) {
+      return pitchBefore;
+    } else {
+      return pitches[pitches.length - 1];
+    }
+  },
+
+  pitchAfter(pitchLetter) {
+    var letter = `${pitchLetter}`.toLowerCase();
+    var pitches = this.get('allPitches');
+    var pitchIndex  = pitches.indexOf(letter);
+    var pitchAfter = pitches[pitchIndex + 1];
+    if (pitchAfter) {
+      return pitchAfter;
+    } else {
+      return pitches[0];
+    }
+  },
+
+  normalizeAsSharps(pitch, modulator) {
+    pitch = `${pitch}`.toLowerCase();
+    modulator = `${modulator}`.toLowerCase();
+
+    if (modulator === 'natural') {
+      return pitch.toUpperCase();
+    }
+
+    var nextPitch = this.pitchAfter(pitch),
+        dist = this.distanceBetweenPitches(pitch, nextPitch);
+
+    if (modulator === 'sharp') {
+
+      // e.g. B# == C
+      if (dist === 1) {
+        return `${nextPitch}`.toUpperCase();
+      } else {
+        return `${pitch.toUpperCase()}-sharp`;
+      }
+    }
+
+    // flat
+    var prevPitch = this.pitchBefore(pitch);
+    dist = this.distanceBetweenPitches(pitch, prevPitch);
+
+    // e.g. Eb == F
+    if (dist === 1) {
+      return `${prevPitch}`.toUpperCase();
+    } else {
+      return `${prevPitch.toUpperCase()}-sharp`;
+    }
+  },
+
   pitchToNumberMap: {
     a: 0,
     b: 2,
@@ -51,5 +116,17 @@ export default Ember.Service.extend({
     e: 7,
     f: 8,
     g: 10
-  }
+  },
+
+  allPitches: function() {
+    var pitches = [];
+
+    for (var key in this.pitchToNumberMap) {
+      if (this.pitchToNumberMap.hasOwnProperty(key)) {
+        pitches.push(key);
+      }
+    }
+
+    return pitches;
+  }.property()
 });

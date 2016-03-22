@@ -4,13 +4,17 @@ const {
   inject: { service },
   String: { htmlSafe },
   RSVP:   { Promise },
-  run:    { later }
+  run:    { later },
+  observer,
+  $
 } = Ember;
 
 export default Ember.Component.extend({
   classNames: ['chord-builder'],
 
   store: service(),
+
+  notesService: service('notes'),
 
   pitchOptions: Ember.A([
     'A', 'B', 'C', 'D', 'E', 'F', 'G'
@@ -37,14 +41,48 @@ export default Ember.Component.extend({
   init() {
     this.get('notes').forEach( (note) => {
       // This is kind of hacky, but the only way I found to get the note's tone
-      // to call its playOrPause function. note('tone') seems to return something
+      // to call its playOrPause function. note.get('tone') seems to return something
       // that is not actually a full ToneItem object, or at any rate it does not
       // have a playOrPause function defined. Pinging the observed property
       // 'invokePlayOrPause' causes the tone's playOrPause to fire.
       note.set('tone.invokePlayOrPause', true);
+
     });
     return this._super(...arguments);
   },
+
+  didInsertElement() {
+    this.updatePianoKeyboard();
+    return this._super(...arguments);
+  },
+
+  updatePianoKeyboard: observer('notes.@each.{pitch,modulator,octave,isPlaying', function() {
+    var self = this;
+
+    $('.piano-key,.piano-key-label').each(function(_, el) {
+      el.classList.remove('depressed');
+    });
+
+    this.get('notes').forEach(function(note) {
+      var pitch = note.get('pitch'),
+          octave = note.get('octave'),
+          mod = note.get('modulator'),
+          pitchPlusMod = self.get('notesService').normalizeAsSharps(pitch, mod);
+
+      octave = Math.min(octave, 4);
+      octave = Math.max(octave, 0);
+
+      var key = $(`#octave-${octave}-${pitchPlusMod}-key`).get(0);
+      if (key) {
+        key.classList.add('depressed');
+      }
+
+      var label = $(`#octave-${octave}-${pitchPlusMod}-label`).get(0);
+      if (label) {
+        label.classList.add('depressed');
+      }
+    });
+  }),
 
   actions: {
     toggleNotes(isToggled, note) {
@@ -54,7 +92,7 @@ export default Ember.Component.extend({
     addNote() {
       var newNote = this.get('store').createRecord('note', {
         pitch: 'C',
-        tone: this.get('store').createRecord('tone-item')
+        tone: this.get('store').createRecord('tone-item', { hasNote: true })
       });
 
       this.get('notes').pushObject(newNote);
@@ -62,6 +100,8 @@ export default Ember.Component.extend({
 
     removeNote(note) {
       this.get('notes').removeObject(note);
+      note.set('isPlaying', false);
+      note.destroyRecord();
     },
 
     playAll() {

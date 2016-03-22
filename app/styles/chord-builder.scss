@@ -1,0 +1,17 @@
+.piano-keyboard {
+  margin-top: 1em;
+  margin-bottom: 2em;
+
+  .piano-key.depressed {
+    fill: #2199e8;
+  }
+
+  .piano-key-label {
+    font-size: 55px;
+    fill: #4B4B4B;
+
+    &.depressed {
+      fill: #fff;
+    }
+  }
+}

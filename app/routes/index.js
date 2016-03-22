@@ -2,6 +2,6 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   beforeModel() {
-    this.transitionTo('tone-generator');
+    this.transitionTo('chord-builder');
   }
 });

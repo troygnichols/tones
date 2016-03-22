@@ -1,9 +1,4 @@
 # TODO
 
-- persistent tones (autosave?)
-- pause all / play all
-
 - chord library lookup
-- piano keyboard visualization
-
-- volume
+- icon for which waveform is playing, below the depressed piano key
